@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulsing Company | Marketing Digital de Alta Performance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #FF1A1A;
+            --red-dim: rgba(255,26,26,0.15);
+            --black: #060606;
+            --white: #F5F5F5;
+            --gray: #888;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 18px 6%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(6,6,6,0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transition: padding .4s;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em;
+        }
+        .nav-logo .dot {
+            width: 12px; height: 12px; background: var(--red); border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { box-shadow: 0 0 0 0 rgba(255,26,26,.7); }
+            50% { box-shadow: 0 0 0 8px rgba(255,26,26,0); }
+        }
+        .nav-links { display: flex; gap: 36px; font-size: .8rem; text-transform: uppercase; letter-spacing: .15em; }
+        .nav-links a { color: var(--gray); text-decoration: none; transition: color .3s; }
+        .nav-links a:hover { color: var(--white); }
+        .nav-cta {
+            background: var(--red); color: #fff; padding: 10px 24px;
+            border-radius: 100px; font-weight: 600; font-size: .8rem;
+            text-decoration: none; letter-spacing: .08em; text-transform: uppercase;
+            transition: box-shadow .3s, transform .3s;
+        }
+        .nav-cta:hover { box-shadow: 0 0 30px rgba(255,26,26,.6); transform: translateY(-2px); }
+
+        /* ─── HERO ─── */
+        #hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            padding: 140px 6% 80px;
+        }
+
+        /* 3D Canvas Background */
+        #hero-canvas {
+            position: absolute; inset: 0; z-index: 0;
+        }
+
+        .hero-inner {
+            position: relative; z-index: 10;
+            text-align: center; max-width: 1000px; margin: 0 auto;
+        }
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,26,26,.1); border: 1px solid rgba(255,26,26,.3);
+            padding: 6px 16px; border-radius: 100px;
+            font-size: .75rem; color: var(--red); letter-spacing: .12em; text-transform: uppercase;
+            margin-bottom: 32px;
+            animation: fadeInUp .8s ease both;
+        }
+        .hero-title {
+            font-family: 'Syne', sans-serif; font-size: clamp(3rem, 9vw, 8rem);
+            font-weight: 800; line-height: 1.0; letter-spacing: -.04em;
+            margin-bottom: 28px;
+            animation: fadeInUp .8s ease .15s both;
+        }
+        .hero-title .line-red {
+            display: block;
+            background: linear-gradient(90deg, #fff 20%, var(--red) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            color: var(--gray); font-size: clamp(.95rem, 2vw, 1.2rem); max-width: 560px; margin: 0 auto 48px;
+            line-height: 1.7;
+            animation: fadeInUp .8s ease .3s both;
+        }
+        .hero-btns {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+            animation: fadeInUp .8s ease .45s both;
+        }
+        .btn-primary {
+            background: var(--red); color: #fff;
+            padding: 16px 36px; border-radius: 100px;
+            font-weight: 700; font-size: 1rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 10px;
+            transition: box-shadow .3s, transform .3s;
+        }
+        .btn-primary:hover { box-shadow: 0 0 40px rgba(255,26,26,.6); transform: translateY(-3px); }
+        .btn-ghost {
+            background: rgba(255,255,255,.05); color: var(--white); border: 1px solid rgba(255,255,255,.12);
+            padding: 16px 36px; border-radius: 100px;
+            font-weight: 600; font-size: 1rem; text-decoration: none;
+            transition: background .3s, transform .3s;
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,.1); transform: translateY(-3px); }
+
+        /* scroll indicator */
+        .scroll-hint {
+            position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            font-size: .7rem; color: var(--gray); letter-spacing: .15em; text-transform: uppercase;
+            animation: fadeIn 1s ease 1.2s both;
+            z-index: 10;
+        }
+        .scroll-hint span { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--red), transparent); animation: scrollLine 2s ease-in-out infinite; }
+        @keyframes scrollLine { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+        /* ─── MARQUEE ─── */
+        .marquee-bar {
+            background: var(--red); padding: 14px 0; overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,.1);
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+        .marquee-track {
+            display: flex; gap: 40px; width: max-content;
+            animation: marquee 22s linear infinite;
+        }
+        .marquee-track span {
+            font-family: 'Syne', sans-serif; font-size: .8rem; font-weight: 700;
+            letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+            display: flex; align-items: center; gap: 20px;
+        }
+        .marquee-track span::after { content: '✦'; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* ─── SECTIONS SHARED ─── */
+        section { padding: 120px 6%; }
+        .section-label {
+            font-size: .7rem; text-transform: uppercase; letter-spacing: .25em;
+            color: var(--red); margin-bottom: 18px; display: block;
+        }
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800;
+            letter-spacing: -.03em; line-height: 1.1;
+        }
+
+        /* ─── SOBRE ─── */
+        #sobre { background: #0A0A0A; }
+        .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .sobre-img-wrap {
+            position: relative;
+        }
+        .sobre-img-wrap img {
+            width: 100%; border-radius: 24px; display: block;
+            filter: brightness(.85) saturate(1.2);
+        }
+        .sobre-img-wrap::before {
+            content: ''; position: absolute; inset: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, var(--red), transparent 60%);
+            z-index: -1;
+        }
+        .sobre-img-wrap .img-badge {
+            position: absolute; bottom: -20px; right: -20px;
+            background: var(--red); border-radius: 20px; padding: 20px 28px;
+            font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+            line-height: 1; border: 4px solid var(--black);
+        }
+        .sobre-img-wrap .img-badge small { display: block; font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 400; margin-top: 4px; }
+        .sobre-text { padding-top: 20px; }
+        .sobre-text h2 { margin-bottom: 20px; }
+        .sobre-text p { color: var(--gray); line-height: 1.8; margin-bottom: 40px; }
+        .stats-row { display: flex; gap: 40px; }
+        .stat h4 { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--red); }
+        .stat p { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--gray); margin-top: 4px; }
+
+        /* ─── SERVICES ─── */
+        #servicos { background: var(--black); }
+        .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; flex-wrap: wrap; gap: 20px; }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .service-card {
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 24px; padding: 40px 36px;
+            position: relative; overflow: hidden;
+            transition: border-color .4s, transform .4s, box-shadow .4s;
+            cursor: default;
+        }
+        .service-card::before {
+            content: ''; position: absolute; bottom: -60px; right: -60px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(255,26,26,.15) 0%, transparent 70%);
+            transition: opacity .4s;
+            opacity: 0;
+        }
+        .service-card:hover { border-color: rgba(255,26,26,.4); transform: translateY(-8px); box-shadow: 0 20px 60px rgba(255,26,26,.12); }
+        .service-card:hover::before { opacity: 1; }
+        .service-icon {
+            width: 56px; height: 56px; background: var(--red-dim);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 28px;
+        }
+        .service-icon svg { width: 26px; height: 26px; stroke: var(--red); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .service-card h4 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; }
+        .service-card p { color: var(--gray); font-size: .9rem; line-height: 1.7; }
+        .service-num {
+            position: absolute; top: 24px; right: 28px;
+            font-family: 'Syne', sans-serif; font-size: 4rem; font-weight: 800;
+            color: rgba(255,255,255,.04); line-height: 1; user-select: none;
+        }
+
+        /* ─── SOCIAL STRIP (redes sociais dedicadas) ─── */
+        #redes {
+            background: linear-gradient(180deg, #0A0A0A 0%, #100000 50%, #0A0A0A 100%);
+            padding: 100px 6%;
+        }
+        .redes-inner { max-width: 1100px; margin: 0 auto; }
+        .redes-header { text-align: center; margin-bottom: 60px; }
+        .redes-header h2 { margin-bottom: 14px; }
+        .redes-header p { color: var(--gray); max-width: 480px; margin: 0 auto; }
+        .social-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .social-card {
+            border-radius: 24px; padding: 36px 28px;
+            display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+            position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,.07);
+            background: rgba(255,255,255,.03);
+            transition: transform .4s, box-shadow .4s;
+            text-decoration: none; color: var(--white);
+        }
+        .social-card:hover { transform: translateY(-8px); }
+        .social-card .sc-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+        .social-card .sc-icon svg { width: 26px; height: 26px; fill: #fff; }
+        .social-card h5 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+        .social-card p { font-size: .8rem; color: var(--gray); line-height: 1.5; }
+        .social-card .sc-arrow { margin-top: auto; font-size: .75rem; color: var(--gray); display: flex; align-items: center; gap: 6px; }
+        .social-card .sc-glow { position: absolute; bottom: -40px; right: -40px; width: 120px; height: 120px; border-radius: 50%; opacity: .2; filter: blur(40px); }
+
+        /* Instagram */
+        .sc-insta { --c: #E1306C; }
+        .sc-insta .sc-icon { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .sc-insta:hover { box-shadow: 0 16px 50px rgba(225,48,108,.25); border-color: rgba(225,48,108,.4); }
+        .sc-insta .sc-glow { background: #e1306c; }
+
+        /* LinkedIn */
+        .sc-linkedin { --c: #0A66C2; }
+        .sc-linkedin .sc-icon { background: #0A66C2; }
+        .sc-linkedin:hover { box-shadow: 0 16px 50px rgba(10,102,194,.25); border-color: rgba(10,102,194,.4); }
+        .sc-linkedin .sc-glow { background: #0A66C2; }
+
+        /* YouTube */
+        .sc-youtube { --c: #FF0000; }
+        .sc-youtube .sc-icon { background: #FF0000; }
+        .sc-youtube:hover { box-shadow: 0 16px 50px rgba(255,0,0,.25); border-color: rgba(255,0,0,.4); }
+        .sc-youtube .sc-glow { background: #FF0000; }
+
+        /* WhatsApp */
+        .sc-whatsapp { --c: #25D366; }
+        .sc-whatsapp .sc-icon { background: #25D366; }
+        .sc-whatsapp:hover { box-shadow: 0 16px 50px rgba(37,211,102,.25); border-color: rgba(37,211,102,.4); }
+        .sc-whatsapp .sc-glow { background: #25D366; }
+
+        /* ─── CASES / NUMBERS ─── */
+        #cases { background: #0A0A0A; }
+        .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; border: 1px solid rgba(255,255,255,.07); border-radius: 24px; overflow: hidden; margin-top: 60px; }
+        .number-item {
+            padding: 48px 36px;
+            background: rgba(255,255,255,.02);
+            border-right: 1px solid rgba(255,255,255,.07);
+            transition: background .3s;
+        }
+        .number-item:last-child { border-right: none; }
+        .number-item:hover { background: rgba(255,26,26,.05); }
+        .number-item h3 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 800; color: var(--red); margin-bottom: 8px; }
+        .number-item p { font-size: .85rem; color: var(--gray); line-height: 1.5; }
+
+        /* ─── PROCESS ─── */
+        #processo { background: var(--black); }
+        .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 64px; position: relative; }
+        .process-steps::before { content: ''; position: absolute; top: 28px; left: 12.5%; right: 12.5%; height: 1px; background: linear-gradient(90deg, transparent, var(--red), transparent); z-index: 0; }
+        .step { padding: 20px; text-align: center; position: relative; }
+        .step-dot {
+            width: 56px; height: 56px; background: var(--black); border: 2px solid var(--red);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--red);
+            margin: 0 auto 24px; position: relative; z-index: 1;
+            transition: background .3s, color .3s;
+        }
+        .step:hover .step-dot { background: var(--red); color: #fff; }
+        .step h5 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+        .step p { font-size: .85rem; color: var(--gray); line-height: 1.6; }
+
+        /* ─── CONTATO ─── */
+        #contato { background: linear-gradient(180deg, #0A0A0A 0%, #100000 100%); }
+        .contato-wrap {
+            max-width: 820px; margin: 0 auto; text-align: center;
+        }
+        .contato-wrap h2 { margin-bottom: 16px; }
+        .contato-wrap > p { color: var(--gray); margin-bottom: 52px; font-size: 1.1rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-field {
+            background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+            color: var(--white); padding: 16px 20px; border-radius: 14px;
+            font-family: 'DM Sans', sans-serif; font-size: .95rem; outline: none;
+            transition: border-color .3s, box-shadow .3s; width: 100%;
+        }
+        .form-field::placeholder { color: #555; }
+        .form-field:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(255,26,26,.1); }
+        .form-full { grid-column: 1 / -1; }
+        .btn-submit {
+            grid-column: 1 / -1; background: var(--red); color: #fff;
+            border: none; padding: 18px; border-radius: 14px;
+            font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+            letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+            transition: box-shadow .3s, transform .3s;
+        }
+        .btn-submit:hover { box-shadow: 0 0 40px rgba(255,26,26,.6); transform: translateY(-2px); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #030303; border-top: 1px solid rgba(255,255,255,.06);
+            padding: 60px 6% 36px;
+        }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 40px; margin-bottom: 48px; }
+        .footer-brand .logo { display: flex; align-items: center; gap: 10px; font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; }
+        .footer-brand p { color: var(--gray); font-size: .85rem; max-width: 260px; line-height: 1.7; }
+        .footer-links h6 { font-family: 'Syne', sans-serif; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gray); margin-bottom: 18px; }
+        .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-links ul li a { color: #777; font-size: .9rem; text-decoration: none; transition: color .3s; }
+        .footer-links ul li a:hover { color: var(--white); }
+        .footer-social { display: flex; gap: 12px; margin-top: 20px; }
+        .footer-social a {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+            display: flex; align-items: center; justify-content: center;
+            transition: background .3s, border-color .3s;
+        }
+        .footer-social a:hover { background: rgba(255,26,26,.15); border-color: rgba(255,26,26,.4); }
+        .footer-social a svg { width: 16px; height: 16px; fill: var(--gray); transition: fill .3s; }
+        .footer-social a:hover svg { fill: var(--white); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,.05); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .footer-bottom p { color: #444; font-size: .8rem; }
+
+        /* ─── FLOATING WHATSAPP ─── */
+        .wa-float {
+            position: fixed; bottom: 32px; right: 32px; z-index: 200;
+            width: 60px; height: 60px; background: #25D366; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 30px rgba(37,211,102,.4);
+            transition: transform .3s, box-shadow .3s;
+            text-decoration: none;
+        }
+        .wa-float:hover { transform: scale(1.1) translateY(-4px); box-shadow: 0 16px 40px rgba(37,211,102,.5); }
+        .wa-float svg { width: 30px; height: 30px; fill: #fff; }
+        .wa-float .wa-ring {
+            position: absolute; inset: -4px; border-radius: 50%;
+            border: 2px solid rgba(37,211,102,.4);
+            animation: wa-pulse 2s ease-in-out infinite;
+        }
+        @keyframes wa-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .8s ease, transform .8s ease; }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .8s ease, transform .8s ease; }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .sobre-grid, .social-cards { grid-template-columns: 1fr; }
+            .social-cards { grid-template-columns: 1fr 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .numbers-grid { grid-template-columns: 1fr 1fr; }
+            .process-steps { grid-template-columns: 1fr 1fr; }
+            .process-steps::before { display: none; }
+            .form-grid { grid-template-columns: 1fr; }
+            .footer-top { flex-direction: column; }
+        }
+        @media (max-width: 500px) {
+            section { padding: 80px 5%; }
+            .social-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">
+            <div class="dot"></div>
+            PULSING<span style="color:var(--red)">COMPANY</span>
+        </div>
+        <div class="nav-links">
+            <a href="#sobre">Sobre</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#redes">Redes</a>
+            <a href="#cases">Resultados</a>
+            <a href="#contato">Contato</a>
+        </div>
+        <a href="#contato" class="nav-cta">Orçamento</a>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <canvas id="hero-canvas"></canvas>
+
+        <div class="hero-inner">
+            <div class="hero-tag">
+                <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--red)"/></svg>
+                Agência de Marketing Digital Premium
+            </div>
+            <h1 class="hero-title">
+                Transformamos presença
+                <span class="line-red">digital em resultados.</span>
+            </h1>
+            <p class="hero-sub">Estratégias de elite para empresas que buscam escala, autoridade e domínio absoluto de mercado.</p>
+            <div class="hero-btns">
+                <a href="#contato" class="btn-primary">
+                    Fale com um especialista
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+                <a href="#servicos" class="btn-ghost">Ver serviços</a>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-bar">
+        <div class="marquee-track" id="mtrack">
+            <span>Tráfego Pago</span><span>Branding Premium</span><span>Criação de Sites</span>
+            <span>SEO Avançado</span><span>Social Media</span><span>Automação de Marketing</span>
+            <span>E-commerce</span><span>Consultoria Estratégica</span>
+            <span>Tráfego Pago</span><span>Branding Premium</span><span>Criação de Sites</span>
+            <span>SEO Avançado</span><span>Social Media</span><span>Automação de Marketing</span>
+            <span>E-commerce</span><span>Consultoria Estratégica</span>
+        </div>
+    </div>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+        <div class="sobre-grid">
+            <div class="sobre-img-wrap reveal-left">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80" alt="Equipe Pulsing">
+                <div class="img-badge">500+<small>Projetos</small></div>
+            </div>
+            <div class="sobre-text reveal-right">
+                <span class="section-label">Sobre nós</span>
+                <h2 class="section-title">A energia que impulsiona o seu crescimento.</h2>
+                <p>A Pulsing Company não é apenas uma agência de marketing. Somos um ecossistema de tecnologia e estratégia focado em alta performance. Unimos criatividade e dados para criar batimentos fortes na presença digital da sua marca.</p>
+                <div class="stats-row">
+                    <div class="stat"><h4>10x</h4><p>ROI Médio</p></div>
+                    <div class="stat"><h4>500+</h4><p>Projetos</p></div>
+                    <div class="stat"><h4>24/7</h4><p>Suporte</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos">
+        <div class="services-header">
+            <div class="reveal">
+                <span class="section-label">O que fazemos</span>
+                <h2 class="section-title">Soluções <span style="color:var(--red)">Premium</span></h2>
+            </div>
+            <p style="color:var(--gray); max-width:320px; font-size:.9rem; line-height:1.7;" class="reveal">Tecnologia avançada para cada etapa do seu funil de vendas.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <span class="service-num">01</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h4>Tráfego Pago</h4>
+                <p>Anúncios de alta conversão no Google, Meta e LinkedIn com foco total em ROAS e escala previsível.</p>
+            </div>
+            <div class="service-card reveal" style="transition-delay:.1s">
+                <span class="service-num">02</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h4>Criação de Sites</h4>
+                <p>Landing pages e e-commerces ultra-velozes, otimizados para SEO e máxima conversão.</p>
+            </div>
+            <div class="service-card reveal" style="transition-delay:.2s">
+                <span class="service-num">03</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </div>
+                <h4>Branding Premium</h4>
+                <p>Identidade visual marcante que transmite autoridade e gera desejo de compra imediato.</p>
+            </div>
+            <div class="service-card reveal" style="transition-delay:.3s">
+                <span class="service-num">04</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </div>
+                <h4>Social Media</h4>
+                <p>Gestão de redes com conteúdo estratégico que engaja, cresce e converte sua audiência.</p>
+            </div>
+            <div class="service-card reveal" style="transition-delay:.4s">
+                <span class="service-num">05</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h4>SEO Avançado</h4>
+                <p>Posicionamento orgânico dominante que garante visibilidade e tráfego qualificado contínuo.</p>
+            </div>
+            <div class="service-card reveal" style="transition-delay:.5s">
+                <span class="service-num">06</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h4>Automação & CRM</h4>
+                <p>Fluxos inteligentes que nutrem leads e maximizam cada ponto do relacionamento com o cliente.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- REDES SOCIAIS -->
+    <section id="redes">
+        <div class="redes-inner">
+            <div class="redes-header reveal">
+                <span class="section-label">Nossa presença digital</span>
+                <h2 class="section-title">Conecte-se <span style="color:var(--red)">conosco</span></h2>
+                <p>Siga nossas redes e fique por dentro das novidades, cases e conteúdos exclusivos de marketing de alta performance.</p>
+            </div>
+            <div class="social-cards">
+                <a href="#" class="social-card sc-insta reveal" style="transition-delay:.05s">
+                    <div class="sc-icon">
+                        <!-- Instagram SVG -->
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </div>
+                    <h5>Instagram</h5>
+                    <p>Conteúdo diário, bastidores e dicas de marketing.</p>
+                    <div class="sc-arrow">Seguir <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+                    <div class="sc-glow"></div>
+                </a>
+                <a href="#" class="social-card sc-linkedin reveal" style="transition-delay:.1s">
+                    <div class="sc-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </div>
+                    <h5>LinkedIn</h5>
+                    <p>Cases, insights e tendências do mercado B2B.</p>
+                    <div class="sc-arrow">Conectar <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+                    <div class="sc-glow"></div>
+                </a>
+                <a href="#" class="social-card sc-youtube reveal" style="transition-delay:.15s">
+                    <div class="sc-icon">
+                        <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+                    </div>
+                    <h5>YouTube</h5>
+                    <p>Vídeos educativos e estratégias comprovadas.</p>
+                    <div class="sc-arrow">Inscrever <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+                    <div class="sc-glow"></div>
+                </a>
+                <a href="https://wa.me/seunumeroaqui" class="social-card sc-whatsapp reveal" style="transition-delay:.2s">
+                    <div class="sc-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    </div>
+                    <h5>WhatsApp</h5>
+                    <p>Fale direto com nossa equipe agora mesmo.</p>
+                    <div class="sc-arrow">Chamar <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+                    <div class="sc-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUMBERS / CASES -->
+    <section id="cases">
+        <div class="reveal" style="text-align:center; margin-bottom:0">
+            <span class="section-label">Resultados comprovados</span>
+            <h2 class="section-title">Números que <span style="color:var(--red)">falam.</span></h2>
+        </div>
+        <div class="numbers-grid">
+            <div class="number-item reveal"><h3 data-target="10" data-suffix="x">0x</h3><p>ROI Médio gerado para nossos clientes</p></div>
+            <div class="number-item reveal" style="transition-delay:.1s"><h3 data-target="500" data-suffix="+">0+</h3><p>Projetos entregues com sucesso</p></div>
+            <div class="number-item reveal" style="transition-delay:.2s"><h3 data-target="98" data-suffix="%">0%</h3><p>Taxa de retenção de clientes</p></div>
+            <div class="number-item reveal" style="transition-delay:.3s"><h3 data-target="8" data-suffix=" anos">0 anos</h3><p>De experiência em alta performance</p></div>
+        </div>
+    </section>
+
+    <!-- PROCESSO -->
+    <section id="processo">
+        <div class="reveal" style="text-align:center; margin-bottom:0">
+            <span class="section-label">Como trabalhamos</span>
+            <h2 class="section-title">Nosso <span style="color:var(--red)">processo</span></h2>
+        </div>
+        <div class="process-steps">
+            <div class="step reveal">
+                <div class="step-dot">01</div>
+                <h5>Diagnóstico</h5>
+                <p>Analisamos profundamente seu negócio, mercado e concorrência.</p>
+            </div>
+            <div class="step reveal" style="transition-delay:.15s">
+                <div class="step-dot">02</div>
+                <h5>Estratégia</h5>
+                <p>Desenvolvemos um plano personalizado com metas claras e mensuráveis.</p>
+            </div>
+            <div class="step reveal" style="transition-delay:.3s">
+                <div class="step-dot">03</div>
+                <h5>Execução</h5>
+                <p>Implementamos com precisão técnica e criatividade de alto nível.</p>
+            </div>
+            <div class="step reveal" style="transition-delay:.45s">
+                <div class="step-dot">04</div>
+                <h5>Otimização</h5>
+                <p>Monitoramos, testamos e escalonamos o que performa melhor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato">
+        <div class="contato-wrap reveal">
+            <span class="section-label">Vamos conversar</span>
+            <h2 class="section-title">Pronto para o <span style="color:var(--red)">próximo nível?</span></h2>
+            <p>Agende uma consultoria estratégica gratuita com nossos especialistas.</p>
+            <div class="form-grid">
+                <input type="text" placeholder="Seu nome" class="form-field">
+                <input type="email" placeholder="Seu melhor e-mail" class="form-field">
+                <input type="tel" placeholder="WhatsApp" class="form-field form-full">
+                <button class="btn-submit">Solicitar consultoria gratuita →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div style="width:10px;height:10px;background:var(--red);border-radius:50%"></div>
+                    PULSING<span style="color:var(--red)">COMPANY</span>
+                </div>
+                <p>Transformando presença digital em resultados reais desde 2016.</p>
+                <div class="footer-social">
+                    <!-- Instagram -->
+                    <a href="#" title="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="#" title="LinkedIn">
+                        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="#" title="YouTube">
+                        <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+                    </a>
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/seunumeroaqui" title="WhatsApp">
+                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h6>Navegação</h6>
+                <ul>
+                    <li><a href="#sobre">Sobre nós</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#cases">Resultados</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h6>Serviços</h6>
+                <ul>
+                    <li><a href="#">Tráfego Pago</a></li>
+                    <li><a href="#">Criação de Sites</a></li>
+                    <li><a href="#">Branding</a></li>
+                    <li><a href="#">Social Media</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h6>Contato</h6>
+                <ul>
+                    <li><a href="mailto:contato@pulsingcompany.com.br">contato@pulsingcompany.com.br</a></li>
+                    <li><a href="https://wa.me/seunumeroaqui">WhatsApp</a></li>
+                    <li><a href="#">Belo Horizonte, MG</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Pulsing Company. Todos os direitos reservados.</p>
+            <p>Feito por Lucas Silva em Belo Horizonte</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/seunumeroaqui" class="wa-float" title="Falar no WhatsApp">
+        <div class="wa-ring"></div>
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    </a>
+
+    <script>
+    // ─── 3D PARTICLE CANVAS ───
+    (function(){
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, particles = [], mouse = { x: W/2, y: H/2 };
+        const COUNT = 90;
+
+        function resize() {
+            W = canvas.width = canvas.offsetWidth;
+            H = canvas.height = canvas.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => {
+            const r = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - r.left;
+            mouse.y = e.clientY - r.top;
+        });
+
+        class Particle {
+            constructor() { this.reset(true); }
+            reset(init) {
+                this.x = Math.random() * (W||window.innerWidth);
+                this.y = init ? Math.random() * (H||window.innerHeight) : (H||window.innerHeight) + 10;
+                this.z = Math.random() * 1.4 + 0.2;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = -Math.random() * 0.4 - 0.1;
+                this.life = 0;
+                this.maxLife = Math.random() * 300 + 200;
+                this.size = Math.random() * 2.2 * this.z + 0.5;
+                this.r = Math.random() < 0.3 ? 255 : Math.random() * 60;
+                this.g = Math.random() < 0.3 ? (Math.random()*30|0) : Math.random() * 60;
+                this.b = Math.random() < 0.3 ? (Math.random()*30|0) : Math.random() * 80;
+                this.connectable = Math.random() > 0.5;
+            }
+            update() {
+                this.life++;
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx*dx+dy*dy);
+                if (dist < 160) {
+                    this.x += dx * 0.008;
+                    this.y += dy * 0.008;
+                } else {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                }
+                if (this.life > this.maxLife || this.y < -20) this.reset(false);
+            }
+            draw() {
+                const alpha = Math.min(this.life/40, 1) * Math.min((this.maxLife-this.life)/40,1);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},${alpha * 0.85})`;
+                ctx.fill();
+            }
+        }
+
+        for(let i=0;i<COUNT;i++) particles.push(new Particle());
+
+        function drawConnections() {
+            const connParts = particles.filter(p=>p.connectable);
+            for(let i=0;i<connParts.length;i++){
+                for(let j=i+1;j<connParts.length;j++){
+                    const dx = connParts[i].x - connParts[j].x;
+                    const dy = connParts[i].y - connParts[j].y;
+                    const d = Math.sqrt(dx*dx+dy*dy);
+                    if(d<120){
+                        const a = (1 - d/120) * 0.25;
+                        ctx.beginPath();
+                        ctx.moveTo(connParts[i].x, connParts[i].y);
+                        ctx.lineTo(connParts[j].x, connParts[j].y);
+                        ctx.strokeStyle = `rgba(255,26,26,${a})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Central glow
+        function drawGlow() {
+            const grd = ctx.createRadialGradient(W/2, H*0.55, 0, W/2, H*0.55, W*0.45);
+            grd.addColorStop(0, 'rgba(255,26,26,0.12)');
+            grd.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = grd;
+            ctx.fillRect(0,0,W,H);
+        }
+
+        function loop() {
+            ctx.clearRect(0,0,W,H);
+            drawGlow();
+            drawConnections();
+            particles.forEach(p=>{ p.update(); p.draw(); });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    })();
+
+    // ─── SCROLL REVEAL ───
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ─── NUMBER COUNTER ───
+    const numEls = document.querySelectorAll('.number-item h3[data-target]');
+    const numObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if(e.isIntersecting && !e.target.dataset.done) {
+                e.target.dataset.done = true;
+                const target = +e.target.dataset.target;
+                const suffix = e.target.dataset.suffix;
+                let curr = 0;
+                const step = Math.ceil(target / 60);
+                const timer = setInterval(() => {
+                    curr = Math.min(curr + step, target);
+                    e.target.textContent = curr + suffix;
+                    if(curr >= target) clearInterval(timer);
+                }, 20);
+            }
+        });
+    }, { threshold: 0.5 });
+    numEls.forEach(el => numObs.observe(el));
+
+    // ─── SMOOTH SCROLL ───
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if(target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+        });
+    });
+    </script>
+</body>
+</html>
