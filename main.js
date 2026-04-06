@@ -1,9 +1,11 @@
 // ─── 3D PARTICLE CANVAS ───
-    (function(){
-        const canvas = document.getElementById('hero-canvas');
-        const ctx = canvas.getContext('2d');
-        let W, H, particles = [], mouse = { x: W/2, y: H/2 };
-        const COUNT = 90;
+(function(){
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return; // se não houver canvas, sai sem lançar erro
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) return;
+    let W, H, particles = [], mouse = { x: 0, y: 0 };
+    const COUNT = 90;
 
         function resize() {
             W = canvas.width = canvas.offsetWidth;
