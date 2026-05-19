@@ -16,21 +16,19 @@ export function Nav() {
 
   return (
     <motion.header
-      className="fixed top-0 left-0 right-0 z-[100] transition-all duration-300"
-      style={{
+      className="fixed top-0 left-0 right-0 z-[100] overflow-hidden"
+      animate={{
+        height: scrolled ? 72 : 96,
         background: scrolled ? 'rgba(5,5,5,0.75)' : 'transparent',
         backdropFilter: scrolled ? 'blur(24px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
       }}
+      transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
     >
-      <motion.nav
-        className="flex items-center justify-between container-pulsing"
-        animate={{ paddingTop: scrolled ? 16 : 22, paddingBottom: scrolled ? 16 : 22 }}
-        transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
-      >
+      <nav className="h-full flex items-center justify-between container-pulsing">
         <a href="#" aria-label="Pulsing — Página inicial">
-          <Logo />
+          <Logo className="h-16 w-auto" />
         </a>
 
         {/* Central links — hidden on mobile */}
@@ -50,7 +48,7 @@ export function Nav() {
         <Button as="a" href="#connected" variant="primary" size="compact">
           Fale com a gente
         </Button>
-      </motion.nav>
+      </nav>
     </motion.header>
   )
 }

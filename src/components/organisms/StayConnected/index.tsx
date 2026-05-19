@@ -119,7 +119,7 @@ export function StayConnected() {
         {/* Footer bar */}
         <div className="mt-20 pt-7 border-t border-line flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Logo compact />
+            <Logo className="h-10 w-auto" />
             <span className="font-sans text-[13px] text-fg-3">Pulsing™ · 2026</span>
           </div>
           <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg-4">
