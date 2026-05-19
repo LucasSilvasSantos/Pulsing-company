@@ -1,3 +1,5 @@
+import logoSrc from '@/assets/pulsing logo Site.png'
+
 interface LogoProps {
   compact?: boolean
   className?: string
@@ -5,23 +7,34 @@ interface LogoProps {
 
 export function Logo({ compact = false, className = '' }: LogoProps) {
   return (
-    <div className={`flex items-center gap-[10px] ${className}`}>
+    <div className={`flex items-center gap-3 select-none ${className}`}>
       <div
-        className="w-7 h-7 rounded-[8px] relative flex-shrink-0"
         style={{
-          background: 'radial-gradient(circle at 50% 85%, #2a2a2a 0%, #0a0a0a 100%)',
+          width: 52,
+          height: 64,
+          overflow: 'hidden',
+          position: 'relative',
+          flexShrink: 0,
         }}
       >
-        <span
-          className="absolute bottom-[6px] left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent"
-          style={{ boxShadow: '0 0 8px rgba(255,26,26,0.8)' }}
+        <img
+          src={logoSrc}
+          alt="Pulsing"
+          style={{
+            position: 'absolute',
+            width: 90,
+            height: 90,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            objectFit: 'contain',
+          }}
         />
       </div>
-      {!compact && (
-        <span className="font-sans font-semibold text-base text-fg tracking-[-0.01em]">
-          Pulsing
-        </span>
-      )}
+
+      
+        
+    
     </div>
   )
 }
